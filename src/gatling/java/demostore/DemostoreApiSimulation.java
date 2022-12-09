@@ -175,7 +175,7 @@ public class DemostoreApiSimulation extends Simulation {
     *
     *              para "Load Testing" solo necesitamos: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
     *              lo que encontramos con el "Performance Test", el maximo encontrado, le pasamos para el "Load Test"
-
+    *
     * Para "Stress Testing" combinar entre load y performance con las lineas:
     *                      constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
     *                      nothingFor(Duration.ofSeconds(10))
