@@ -145,13 +145,18 @@ public class DemostoreApiSimulation extends Simulation {
             .exec(Categories.update);
 
     /*PASO 4: Hacer la simulacion (cantidad de usuarios, cuanto tiempo sera la simulacion, etc)*/
-    // Open Model: Se usa para "Performance Testing"
-    //              va desde 1, 2 a n usuarios
-    //              se ve que los tiempos de respuesta no varien
-    //              por lo general todos los sistemas son modelos abiertos
 
-    //              por lo general en un "Performance Testing" solo se tendra la linea: rampUsers(10).during(Duration.ofSeconds(20))
-    //              para saber hasta donde nuestro sistema aguanta, que seria el maximo, este sera el baseline, ya que la segunda vez se ejecuta con el mismo numero de usuarios y no deberia variar
+    /*
+     * Open Model: Se usa para "Performance Testing"
+     *             va desde 1, 2 a n usuarios
+     *             se ve que los tiempos de respuesta no varien
+     *             por lo general todos los sistemas son modelos abiertos
+     *
+     *             por lo general en un "Performance Testing" solo se tendra la linea: rampUsers(10).during(Duration.ofSeconds(20))
+     *             para saber hasta donde nuestro sistema aguanta, que seria el maximo, este sera el baseline, ya que la segunda vez se ejecuta con el mismo numero de usuarios y no deberia variar
+     * */
+
+    // Open Model
 //    {
 //        setUp(
 //                scn.injectOpen(
@@ -163,22 +168,26 @@ public class DemostoreApiSimulation extends Simulation {
 //                .protocols(httpProtocol);
 //    }
 
-    // Closed Model: Algo que ya esta definido
-    //              para sistemas que no nos permiten hacer mas de N(20) requests por segundo, definimos solo la cantidad concurrente que decidimos
-    //              sirve tambien para "Load Testing", en vez de enviar secuencialmente 1, 2, etc; enviamos N(50) cantidad de golpe
+    /*
+    * Closed Model: Algo que ya esta definido
+    *              para sistemas que no nos permiten hacer mas de N(20) requests por segundo, definimos solo la cantidad concurrente que decidimos
+    *              sirve tambien para "Load Testing", en vez de enviar secuencialmente 1, 2, etc; enviamos N(50) cantidad de golpe
+    *
+    *              para "Load Testing" solo necesitamos: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
+    *              lo que encontramos con el "Performance Test", el maximo encontrado, le pasamos para el "Load Test"
 
-    //              para "Load Testing" solo necesitamos: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
-    //              lo que encontramos con el "Performance Test", el maximo encontrado, le pasamos para el "Load Test"
+    * Para "Stress Testing" combinar entre load y performance con las lineas:
+    *                      constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
+    *                      nothingFor(Duration.ofSeconds(10))
+    *                      constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
+    * Para "Stress Testing", se configura el tiempo en la linea: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
+    * Segun el valor encontrado en el "Performance Test", se lo para en un tiempo con: nothingFor(Duration.ofSeconds(10))
+    * Despues se le vuelve a mandar con: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
+    * Para Estresar al sistema y ver como reacciona
+    * A la par que se ejecuta el "Stress Testing" hay que monitorear los recursos del sistema que estamos testeando (Memoria, CPU, Disco, Network)
+    * */
 
-    // Para "Stress Testing" combinar entre load y performance con las lineas:
-    //                      constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
-    //                      nothingFor(Duration.ofSeconds(10))
-    //                      constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
-    // Para "Stress Testing", se configura el tiempo en la linea: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
-    // Segun el valor encontrado en el "Performance Test", se lo para en un tiempo con: nothingFor(Duration.ofSeconds(10))
-    // Despues se le vuelve a mandar con: constantConcurrentUsers(5).during(Duration.ofSeconds(20))))
-    // Para Estresar al sistema y ver como reacciona
-    // A la par que se ejecuta el "Stress Testing" hay que monitorear los recursos del sistema que estamos testeando (Memoria, CPU, Disco, Network)
+    // Closed Model
     {
         setUp(
                 scn.injectClosed(
